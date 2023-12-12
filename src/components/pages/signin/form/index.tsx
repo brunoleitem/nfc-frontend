@@ -14,6 +14,8 @@ import {
 } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
   email: z
@@ -28,9 +30,21 @@ export function SignInForm() {
   const form = useForm<FormType>({
     resolver: zodResolver(formSchema),
   });
+  const router = useRouter();
+  async function onSubmit(values: FormType) {
+    const result = await signIn("credentials", {
+      email: values.email,
+      password: values.password,
+      redirect: false,
+    });
 
-  function onSubmit(values: FormType) {
-    console.log(values);
+    console.log(result);
+    //tratar erro
+    if (result?.error) {
+      return;
+    }
+    router.replace("/dashboard");
+    // console.log(JSON.parse(result.error).message);
   }
 
   return (
