@@ -4,6 +4,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/providers/theme-provider";
 import { AuthSessionProvider } from "@/providers/session-provider";
 const inter = Inter({ subsets: ["latin"] });
+import { Toaster } from "@/components/ui/toaster";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -24,7 +25,10 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <AuthSessionProvider>{children}</AuthSessionProvider>
+          <AuthSessionProvider>
+            {children}
+            <Toaster />
+          </AuthSessionProvider>
         </ThemeProvider>
       </body>
     </html>

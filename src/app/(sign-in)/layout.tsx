@@ -1,6 +1,7 @@
 import { getServerSession } from "next-auth";
 import { nextAuthOptions } from "../api/auth/[...nextauth]/route";
 import { redirect } from "next/navigation";
+import { Toaster } from "@/components/ui/toaster";
 
 interface PrivateLayoutProps {
   children: React.ReactNode;
@@ -12,5 +13,10 @@ export default async function PrivateLayout({ children }: PrivateLayoutProps) {
   if (session) {
     redirect("/dashboard");
   }
-  return <>{children}</>;
+  return (
+    <>
+      {children}
+      <Toaster />
+    </>
+  );
 }

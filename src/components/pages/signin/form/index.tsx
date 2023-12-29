@@ -2,11 +2,11 @@
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { ReloadIcon } from "@radix-ui/react-icons";
 import * as z from "zod";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -16,6 +16,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { useToast } from "@/components/ui/use-toast";
 
 const formSchema = z.object({
   email: z
@@ -27,11 +29,14 @@ const formSchema = z.object({
 type FormType = z.infer<typeof formSchema>;
 
 export function SignInForm() {
+  const [loading, setLoading] = useState(false);
+  const { toast } = useToast();
   const form = useForm<FormType>({
     resolver: zodResolver(formSchema),
   });
   const router = useRouter();
   async function onSubmit(values: FormType) {
+    setLoading(true);
     const result = await signIn("credentials", {
       email: values.email,
       password: values.password,
@@ -41,15 +46,19 @@ export function SignInForm() {
     console.log(result);
     //tratar erro
     if (result?.error) {
-      return;
+      setLoading(false);
+      return toast({
+        title: "Erro!",
+        description: JSON.parse(result?.error).message,
+        variant: "destructive",
+      });
     }
     router.replace("/dashboard");
-    // console.log(JSON.parse(result.error).message);
   }
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 w-64">
         <FormField
           control={form.control}
           name="email"
@@ -57,11 +66,8 @@ export function SignInForm() {
             <FormItem>
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input placeholder="shadcn" {...field} />
+                <Input placeholder="" {...field} />
               </FormControl>
-              <FormDescription>
-                This is your public display name.
-              </FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -73,16 +79,19 @@ export function SignInForm() {
             <FormItem>
               <FormLabel>Senha</FormLabel>
               <FormControl>
-                <Input placeholder="shadcn" {...field} />
+                <Input type="password" placeholder="" {...field} />
               </FormControl>
-              <FormDescription>
-                This is your public display name.
-              </FormDescription>
               <FormMessage />
             </FormItem>
           )}
         />
-        <Button type="submit">Submit</Button>
+        <Button disabled={loading} className="w-full" type="submit">
+          {loading ? (
+            <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
+          ) : (
+            "Entrar"
+          )}
+        </Button>
       </form>
     </Form>
   );
