@@ -1,4 +1,4 @@
-import { Header } from "@/components/global/header";
+import { Header } from "@/components/main/header";
 import { SignInForm } from "@/components/pages/signin/form";
 
 export default function Home() {
