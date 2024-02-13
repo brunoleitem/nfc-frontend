@@ -13,7 +13,7 @@ export const nextAuthOptions: NextAuthOptions = {
 
       async authorize(credentials, req) {
         const response = axios
-          .post("http://localhost:3333/sessions", {
+          .post("https://nfc-backend-production.up.railway.app/sessions", {
             email: credentials?.email,
             password: credentials?.password,
           })
