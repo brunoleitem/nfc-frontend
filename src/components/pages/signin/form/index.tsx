@@ -58,15 +58,14 @@ export function SignInForm() {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 w-64">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="w-96">
         <FormField
           control={form.control}
           name="email"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>Email</FormLabel>
+            <FormItem className="mb-4">
               <FormControl>
-                <Input placeholder="" {...field} />
+                <Input placeholder="Email" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -77,19 +76,18 @@ export function SignInForm() {
           name="password"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Senha</FormLabel>
               <FormControl>
-                <Input type="password" placeholder="" {...field} />
+                <Input type="password" placeholder="Senha" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
-        <Button disabled={loading} className="w-full" type="submit">
+        <Button disabled={loading} className="w-full mt-8" type="submit">
           {loading ? (
             <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
           ) : (
-            "Entrar"
+            "Fazer login"
           )}
         </Button>
       </form>
